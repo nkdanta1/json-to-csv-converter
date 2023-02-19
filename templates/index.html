@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JSON to CSV Converter</title>
+</head>
+
+<body>
+    <h1>JSON to CSV Converter</h1>
+    <form id="json-form">
+        <label for="json-input">Enter JSON data:</label><br>
+        <textarea id="json-input" name="json-input" rows="10" cols="50"></textarea><br>
+        <input type="submit" value="Convert to CSV">
+    </form>
+    <script>
+        document.getElementById('json-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var jsonInput = document.getElementById('json-input').value;
+            fetch('/convert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonInput
+            }).then(function (response) {
+                return response.blob();
+            }).then(function (blob) {
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'data.csv';
+                link.click();
+            });
+        });
+    </script>
+</body>
+
+</html>
